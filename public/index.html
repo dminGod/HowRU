@@ -1,0 +1,91 @@
+<html>
+<head>
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+	<!-- Optional theme -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+</head>
+<body ng-app="HelloWorldApp" ng-controller="HelloWorldController">
+
+<nav class="navbar navbar-inverse navbar-fixed-top">
+	<div class="container">
+		<div class="navbar-header">
+			<a class="navbar-brand" href="#">HowRU</a>
+		</div>
+	</div>
+</nav>
+
+<br/><br/>
+<div class="container">
+
+	<br/>
+
+	<div class="row">
+
+	<div class="col-md-4" ng-repeat="node in nodes">
+			<div class="panel panel-default">
+			<div class="panel-heading">{{node.name}}</div>
+			<div class="panel-body">
+
+				Memory Used :
+				<div class="progress">
+					<div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="{{node.memory}}"
+						 aria-valuemin="0" aria-valuemax="100" style="width: {{node.memory}}">
+						Memory {{node.memory}}%
+					</div>
+				</div>
+
+				<div ng-if="node.role">
+				Role : {{node.role}}
+				</div>
+
+
+				<h4>HDDs</h4>
+				<div class="row">
+				<div class="col-md-6" ng-repeat="hdd in node.hdds">
+				<div class="progress">
+					<div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="{{hdd.used}}"
+						 aria-valuemin="0" aria-valuemax="100" style="width: {{hdd.used}}">
+						{{hdd.name}} {{hdd.used}}%
+					</div>
+				</div>
+				</div>
+				</div>
+
+
+				<div ng-if="node.role == 'cassandra'">
+					This is cassandra
+
+					<span>Cassandra is down</span>
+					<span>Cassandra is up</span>
+				</div>
+
+				<div ng-if="node.role == 'hector'">
+					<span>Hector is down</span>
+					<span>Hector is up</span>
+				</div>
+
+
+
+			</div>
+		</div>
+	</div>
+
+
+
+	</div>
+
+</div><!-- /.container -->
+
+
+
+<script type="text/javascript" src="js/vendor/angular.js"></script>
+<script type="text/javascript" src="js/vendor/websocket.js"></script>
+
+<script src="js/bootstrap.min.js"></script>
+
+<script type="text/javascript" src="js/module.js"></script>
+</body>
+</html>
