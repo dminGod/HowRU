@@ -24,6 +24,17 @@
 
 	<div class="row">
 
+		<div class="col-md-12" ng-repeat="greet in greeting">
+			<pre>
+			{{greet}}
+				</pre>
+		</div>
+
+	</div>
+
+
+	<div class="row">
+
 	<div class="col-md-4" ng-repeat="node in nodes">
 			<div class="panel panel-default">
 			<div class="panel-heading">{{node.name}}</div>
@@ -40,7 +51,6 @@
 				<div ng-if="node.role">
 				Role : {{node.role}}
 				</div>
-
 
 				<h4>HDDs</h4>
 				<div class="row">

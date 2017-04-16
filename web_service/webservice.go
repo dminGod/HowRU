@@ -11,6 +11,10 @@ import (
 	"time"
 
 	"github.com/gorilla/websocket"
+	"fmt"
+	"github.com/dminGod/HowRU/proto"
+	"google.golang.org/grpc"
+	"context"
 )
 
 const (
@@ -35,6 +39,9 @@ var (
 		ReadBufferSize:  1024,
 		WriteBufferSize: 1024,
 	}
+
+	grpc_connection *grpc.ClientConn
+
 )
 
 func readFileIfModified(lastMod time.Time) ([]byte, time.Time, error) {
@@ -58,7 +65,27 @@ func reader(ws *websocket.Conn) {
 	ws.SetReadDeadline(time.Now().Add(pongWait))
 	ws.SetPongHandler(func(string) error { ws.SetReadDeadline(time.Now().Add(pongWait)); return nil })
 	for {
-		_, _, err := ws.ReadMessage()
+		a, b, err := ws.ReadMessage()
+
+		fmt.Println( "a->", a, "<-b->", string(b) )
+
+		// Get the commands to run...
+
+//		c := d30hectorda.GetHDDs()
+
+
+		grpc_connection, _ = grpc.Dial("127.0.0.1:9191", grpc.WithInsecure())
+
+		remoteReq := remote.RemoteRequest{
+			RequestBody: "ls -ltrh",
+			TargetHost: "localhost",
+		}
+
+
+		hbc := remote.NewHeyBuddyClient(grpc_connection)
+		resp, _ := hbc.ExecBuddy(context.Background(), &remoteReq)
+		fmt.Println("Response from the grpc", resp)
+
 		if err != nil {
 			break
 		}
@@ -107,7 +134,9 @@ func writer(ws *websocket.Conn, lastMod time.Time) {
 }
 
 func serveWs(w http.ResponseWriter, r *http.Request) {
+
 	ws, err := upgrader.Upgrade(w, r, nil)
+
 	if err != nil {
 		if _, ok := err.(websocket.HandshakeError); !ok {
 			log.Println(err)
@@ -116,6 +145,7 @@ func serveWs(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var lastMod time.Time
+
 	if n, err := strconv.ParseInt(r.FormValue("lastMod"), 16, 64); err == nil {
 		lastMod = time.Unix(0, n)
 	}
@@ -152,13 +182,7 @@ func serveHome(w http.ResponseWriter, r *http.Request) {
 }
 
 func StartServer() {
-	flag.Parse()
 
-	/*
-	if flag.NArg() != 1 {
-		log.Fatal("filename not specified")
-	}
-	*/
 
 	filename = "c:\\data.txt"//flag.Args()[0]
 	http.HandleFunc("/", serveHome)
@@ -166,6 +190,7 @@ func StartServer() {
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./public"))))
 
 	http.HandleFunc("/ws", serveWs)
+
 	if err := http.ListenAndServe(*addr, nil); err != nil {
 		log.Fatal(err)
 	}

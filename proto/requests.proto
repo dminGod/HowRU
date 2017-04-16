@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package remote;
+
+service HeyBuddy {
+
+    rpc ExecBuddy(RemoteRequest) returns (RemoteResponse);
+}
+
+// This request is used for both asking data and requesting to execute commands on the remote system
+//
+message RemoteRequest {
+
+    string request_tag = 1;
+    string request_body = 2;
+    string target_host = 3;
+    string request_meta = 4;
+    string request_id = 5;
+}
+
+message RemoteResponse {
+
+    string request_id = 1;
+    string request_tag = 2;
+    string request_body = 3;
+    string response_body = 4;
+    string response_status = 5;
+}
+

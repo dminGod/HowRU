@@ -1,9 +1,10 @@
 angular.module('HelloWorldApp', ['ngWebSocket'])
    .controller('HelloWorldController', function($scope, $websocket) {
 
-       var dataStream = $websocket('ws://127.0.0.1:8080/ws');
+       window.dataStream = $websocket('ws://127.0.0.1:8080/ws');
 
         var collection = [];
+
 
         $scope.nodes = [
         {name : "Node1", role: "cassandra", hdds: [{name : "xvdf", used: 50}, {name : "xvgf", used: 70}]},
@@ -12,14 +13,27 @@ angular.module('HelloWorldApp', ['ngWebSocket'])
         ]
 
 
-//       $scope.greeting = "Hello World";
+       $scope.greeting = [];
+
 
         dataStream.onMessage(function(message) {
 
-            myMessage = JSON.parse(message.data)
-            $scope.greeting = myMessage.hello
-            console.log(message)
+//            myMessage = JSON.parse(message.data)
+           //  $scope.greeting = message.data // myMessage.hello
+
+            $scope.greeting.push(message.data)
+            console.log(message.data)
+
 
         });
+
+
+        setInterval(function(){
+
+             dataStream.send("heyyyyyyyyy")
+        }, 15000)
+
+
+        dataStream.send("heyyyyyyyyy")
 
 });
