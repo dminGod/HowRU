@@ -1,6 +1,8 @@
 # HowRU
 This go program is the frontend server that connects to another small client called Buddy that sits on the server.
 
+The Buddy Server can be found [Here](https://github.com/dminGod/Buddy)
+
 ### HowRU Components
 3 Major components of this application right now :
 
