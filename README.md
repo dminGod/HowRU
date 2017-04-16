@@ -4,6 +4,11 @@ This go program is the frontend server that connects to another small client cal
 ### HowRU Components
 3 Major components of this application right now :
 
+
+Architecture Diagram:
+![Alt text](/architecture.jpg?raw=true "HowRU Architecture")
+
+
 - HTTP server to serve - Frontend Web Interface
 - Web Sockets based server to service requests from the Frontend
 - GRPC client to talk to Buddy clients that are deployed on remote servers
